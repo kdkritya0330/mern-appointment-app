@@ -14,10 +14,33 @@ pipeline {
         }
 
         stage('Build Docker Images') {
-            steps {
-                script {
-                    sh 'docker build -t mern-frontend ./client'
-                    sh 'docker build -t mern-backend .'
+            parallel {
+                stage('Build Frontend Image') {
+                    steps {
+                        script {
+                            try {
+                                echo 'Building frontend Docker image...'
+                                sh 'docker build -t mern-frontend ./client'
+                            } catch (Exception e) {
+                                currentBuild.result = 'FAILURE'
+                                throw e
+                            }
+                        }
+                    }
+                }
+
+                stage('Build Backend Image') {
+                    steps {
+                        script {
+                            try {
+                                echo 'Building backend Docker image...'
+                                sh 'docker build -t mern-backend .'
+                            } catch (Exception e) {
+                                currentBuild.result = 'FAILURE'
+                                throw e
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -25,7 +48,13 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    try {
+                        echo 'Starting containers with Docker Compose...'
+                        sh 'docker-compose up -d'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
                 }
             }
         }
@@ -33,8 +62,16 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo 'Cleaning up Docker resources...'
             sh 'docker system prune -f'
+        }
+
+        success {
+            echo 'Pipeline ran successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
