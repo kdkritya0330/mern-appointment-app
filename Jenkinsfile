@@ -6,23 +6,25 @@ pipeline {
         BACKEND_DIR = '.'
     }
 
-
     stages {
+
+        stage('Clone Repo') {
+            steps {
+                git url: 'https://github.com/kdkritya0330/mern-appointment-app.git', branch: 'main'
+            }
+        }
+
         stage('Check Commit Author') {
             steps {
                 script {
                     def author = bat(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
-                    if (author == 'jenkins') {
+                    echo "Last Commit Author: ${author}"
+                    if (author.toLowerCase().contains('jenkins')) {
                         echo 'Build triggered by Jenkins bot, skipping...'
                         currentBuild.result = 'SUCCESS'
                         return
                     }
                 }
-            }
-        }
-        stage('Clone Repo') {
-            steps {
-                git url: 'https://github.com/kdkritya0330/mern-appointment-app.git', branch: 'main'
             }
         }
 
@@ -33,10 +35,10 @@ pipeline {
                         script {
                             try {
                                 echo 'Building frontend Docker image...'
-                              bat 'docker build -t mern-frontend ./client'
+                                bat "docker build -t mern-frontend ${env.FRONTEND_DIR}"
                             } catch (Exception e) {
                                 currentBuild.result = 'FAILURE'
-                                throw e
+                                error("Frontend build failed: ${e}")
                             }
                         }
                     }
@@ -47,10 +49,10 @@ pipeline {
                         script {
                             try {
                                 echo 'Building backend Docker image...'
-                                bat 'docker build -t mern-backend .'
+                                bat "docker build -t mern-backend ${env.BACKEND_DIR}"
                             } catch (Exception e) {
                                 currentBuild.result = 'FAILURE'
-                                throw e
+                                error("Backend build failed: ${e}")
                             }
                         }
                     }
@@ -63,10 +65,11 @@ pipeline {
                 script {
                     try {
                         echo 'Starting containers with Docker Compose...'
-                        bat 'docker-compose up -d'
+                        bat 'docker-compose down || exit 0' // Optional: stops old containers
+                        bat 'docker-compose up -d --build'
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
-                        throw e
+                        error("Docker Compose failed: ${e}")
                     }
                 }
             }
@@ -76,15 +79,15 @@ pipeline {
     post {
         always {
             echo 'Cleaning up Docker resources...'
-            bat 'docker system prune -f'
+            bat 'docker system prune -f -a --volumes || exit 0'
         }
 
         success {
-            echo 'Pipeline ran successfully!'
+            echo '✅ Pipeline ran successfully!'
         }
 
         failure {
-            echo 'Pipeline failed. Check logs for details.'
+            echo '❌ Pipeline failed. Check logs for details.'
         }
     }
 }
