@@ -1,0 +1,81 @@
+/* Add smooth fade-in animation to the table */
+.animated-table {
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Fade-in effect */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Style the table with Bootstrap classes */
+  .ant-table {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .ant-table-thead > tr > th {
+    background-color: #e0f7fa; /* Light blue for header */
+    color: #00796b; /* Teal text color for the header */
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .ant-table-tbody > tr:nth-child(odd) {
+    background-color: #f1f1f1; /* Light gray for odd rows */
+  }
+  
+  .ant-table-tbody > tr:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+  }
+  
+  .ant-table-tbody > tr:hover {
+    background-color: #b2dfdb; /* Light teal on hover */
+  }
+  
+  .table-row {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Style buttons with Bootstrap and custom colors */
+  .btn-approve {
+    background-color: #4caf50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .btn-approve:hover {
+    background-color: #388e3c; /* Darker green on hover */
+    transform: scale(1.05);
+  }
+  
+  .btn-reject {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .btn-reject:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: scale(1.05);
+  }
+  
+  /* Customize the table borders */
+  .ant-table-tbody > tr > td {
+    border: 1px solid #ddd;
+  }
+  
+  .ant-table-tbody > tr:hover > td {
+    border: 1px solid #00796b; /* Highlight border on hover */
+  }
+  

@@ -108,12 +108,39 @@ const updateStatusController = async (req, res) => {
       message: "Error In Update Status",
     });
   }
-};
 
+};
+const getDoctorsController = async (req, res) => {
+  try {
+    // Fetch all doctors from the database, include the specialty if available
+    const doctors = await doctorModel.find();
+    
+    console.log({doctors});
+    
+    if (!doctors) {
+      return res.status(404).json({
+        success: false,
+        message: 'No doctors found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: doctors,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+    });
+  }
+};
 module.exports = {
   getDoctorInfoController,
   updateProfileController,
   getDoctorByIdController,
   doctorAppointmentsController,
   updateStatusController,
+  getDoctorsController,
 };

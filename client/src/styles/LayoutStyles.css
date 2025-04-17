@@ -91,3 +91,58 @@
     margin: 0 10px;
     text-transform: uppercase;
 }
+.quote-container {
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .quote-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 12s linear infinite;
+    font-weight: 600;
+    color: #0d6efd;
+  }
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  /* Layout.css */
+.sidebar {
+    transition: transform 0.3s ease;
+    z-index: 1030; /* Above content */
+  }
+  
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 220px; /* or adjust to match sidebar width */
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0%);
+    position: relative;
+  }
+  .nav-link {
+    padding: 10px 12px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .nav-link:hover {
+    background-color: #0d6efd;
+    color: #fff !important;
+    text-decoration: none;
+  }
+  

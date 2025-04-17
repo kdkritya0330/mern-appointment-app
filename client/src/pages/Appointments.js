@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "./../components/Layout";
 import moment from "moment";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
+import { motion } from "framer-motion"; // For smooth animation
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -28,43 +29,76 @@ const Appointments = () => {
 
   const columns = [
     {
-      title: "ID",
+      title: "Appointment ID",
       dataIndex: "_id",
+      key: "_id",
+      render: (text) => <Tag color="geekblue">{text.slice(-5)}</Tag>,
     },
-    // {
-    //   title: "Name",
-    //   dataIndex: "name",
-    //   render: (text, record) => (
-    //     <span>
-    //       {record.doctorInfo.firstName} {record.doctorInfo.lastName}
-    //     </span>
-    //   ),
-    // },
-    // {
-    //   title: "Phone",
-    //   dataIndex: "phone",
-    //   render: (text, record) => <span>{record.doctorInfo.phone}</span>,
-    // },
     {
       title: "Date & Time",
       dataIndex: "date",
+      key: "date",
       render: (text, record) => (
         <span>
           {moment(record.date).format("DD-MM-YYYY")} &nbsp;
-          {moment(record.time).format("HH:mm")}
+          {moment(record.time).format("hh:mm A")}
         </span>
       ),
     },
     {
       title: "Status",
       dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        let color = "blue";
+        if (status === "pending") color = "volcano";
+        else if (status === "approved") color = "green";
+        else if (status === "cancelled") color = "red";
+        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+      },
     },
   ];
 
   return (
     <Layout>
-      <h1>Appoinmtnets Lists</h1>
-      <Table columns={columns} dataSource={appointments} />
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="container py-5"
+      >
+        <h1 className="text-center fw-bold text-primary mb-4">
+          Your Appointment History
+        </h1>
+        <Table
+          columns={columns}
+          dataSource={appointments}
+          pagination={{ pageSize: 5 }}
+          bordered
+          className="shadow rounded"
+        />
+
+        {/* Additional Content */}
+        <div className="text-center mt-5">
+          <h3 className="text-success fw-semibold">Need to Reschedule?</h3>
+          <p className="text-muted">
+            Contact our support team or your doctor directly from your dashboard. Your health is our priority.
+          </p>
+          <p className="text-muted">
+            You can always view your upcoming and past appointments here. We ensure transparency and simplicity in your healthcare journey.
+          </p>
+        </div>
+
+        {/* Quote Section */}
+        <div className="text-center mt-5 p-4 bg-light rounded shadow-sm">
+          <blockquote className="blockquote text-primary fs-4">
+            “The best doctor gives the least medicine.” 
+          </blockquote>
+          <footer className="blockquote-footer mt-2">
+            Benjamin Franklin
+          </footer>
+        </div>
+      </motion.div>
     </Layout>
   );
 };

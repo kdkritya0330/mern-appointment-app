@@ -1,34 +1,53 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Card, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const DoctorList = ({ doctor }) => {
   const navigate = useNavigate();
+
+  const renderTooltip = (props) => (
+    <Tooltip id={`tooltip-${doctor._id}`} {...props}>
+      Click to book appointment with Dr. {doctor.firstName} {doctor.lastName}
+    </Tooltip>
+  );
+
   return (
-    <>
-      <div
-        className="card m-2"
-        style={{ cursor: "pointer" }}
+    <OverlayTrigger placement="top" overlay={renderTooltip}>
+      <Card
+        className="border-0 h-100 shadow-sm bg-white transition-all"
+        style={{ cursor: "pointer", transition: "transform 0.3s, box-shadow 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.03)";
+          e.currentTarget.classList.add("shadow");
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.classList.remove("shadow");
+        }}
         onClick={() => navigate(`/doctor/book-appointment/${doctor._id}`)}
       >
-        <div className="card-header">
-          Dr. {doctor.firstName} {doctor.lastName}
-        </div>
-        <div className="card-body">
-          <p>
-            <b>Specialization</b> {doctor.specialization}
-          </p>
-          <p>
-            <b>Experience</b> {doctor.experience}
-          </p>
-          <p>
-            <b>Fees Per Cunsaltation</b> {doctor.feesPerCunsaltation}
-          </p>
-          <p>
-            <b>Timings</b> {doctor.timings[0]} - {doctor.timings[1]}
-          </p>
-        </div>
-      </div>
-    </>
+        <Card.Body>
+          <Card.Title className="text-primary fw-bold fs-5 mb-3">
+            Dr. {doctor.firstName} {doctor.lastName}
+          </Card.Title>
+          <Card.Text className="mb-1">
+            <strong>Specialization:</strong> {doctor.specialization}
+          </Card.Text>
+          <Card.Text className="mb-1">
+            <strong>Experience:</strong> {doctor.experience} years
+          </Card.Text>
+          <Card.Text className="mb-1">
+            <strong>Fees Per Consultation:</strong> ₹{doctor.feesPerCunsaltation}
+          </Card.Text>
+          <Card.Text className="mb-3">
+            <strong>Timings:</strong> {doctor.timings[0]} - {doctor.timings[1]}
+          </Card.Text>
+          <Button variant="outline-primary" size="sm">
+            Book Appointment
+          </Button>
+        </Card.Body>
+      </Card>
+    </OverlayTrigger>
   );
 };
 

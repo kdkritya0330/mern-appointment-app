@@ -14,8 +14,13 @@ import Profile from "./pages/doctor/Profile";
 import BookingPage from "./pages/BookingPage";
 import Appointments from "./pages/Appointments";
 import DoctorAppointments from "./pages/doctor/DoctorAppointments";
+import Footer from "./components/Footer"; // ✅ Footer import
+import Error404 from "./pages/Error404"; // ✅ 404 page import
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   const { loading } = useSelector((state) => state.alerts);
+
   return (
     <>
       <BrowserRouter>
@@ -111,6 +116,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
+            {/* 🚨 404 Route - Catch-all route goes last */}
+            <Route path="*" element={<Error404 />} />
           </Routes>
         )}
       </BrowserRouter>
