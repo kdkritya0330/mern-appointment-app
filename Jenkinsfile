@@ -20,7 +20,7 @@ pipeline {
                         script {
                             try {
                                 echo 'Building frontend Docker image...'
-                                sh 'docker build -t mern-frontend ./client'
+                              bat 'docker build -t mern-frontend ./client'
                             } catch (Exception e) {
                                 currentBuild.result = 'FAILURE'
                                 throw e
@@ -34,7 +34,7 @@ pipeline {
                         script {
                             try {
                                 echo 'Building backend Docker image...'
-                                sh 'docker build -t mern-backend .'
+                                bat 'docker build -t mern-backend .'
                             } catch (Exception e) {
                                 currentBuild.result = 'FAILURE'
                                 throw e
@@ -50,7 +50,7 @@ pipeline {
                 script {
                     try {
                         echo 'Starting containers with Docker Compose...'
-                        sh 'docker-compose up -d'
+                        bat 'docker-compose up -d'
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
                         throw e
@@ -63,7 +63,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up Docker resources...'
-            sh 'docker system prune -f'
+            bat 'docker system prune -f'
         }
 
         success {
