@@ -5,6 +5,18 @@ pipeline {
         FRONTEND_DIR = 'client'
         BACKEND_DIR = '.'
     }
+stage('Check Commit Author') {
+    steps {
+        script {
+            def author = bat(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+            if (author == 'jenkins') {
+                echo 'Build triggered by Jenkins bot, skipping...'
+                currentBuild.result = 'SUCCESS'
+                return
+            }
+        }
+    }
+}
 
     stages {
         stage('Clone Repo') {
