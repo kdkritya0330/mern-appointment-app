@@ -1,18 +1,17 @@
-version: "3.9"
-
+# docker-compose.yml
 services:
-  frontend:
-    build:
-      context: ./client
-      dockerfile: dockerfile
-    ports:
-      - "3030:3030"
-    depends_on:
-      - backend
-
   backend:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    container_name: mern-backend
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: mern-frontend

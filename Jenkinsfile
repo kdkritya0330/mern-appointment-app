@@ -34,11 +34,10 @@ pipeline {
                     steps {
                         script {
                             try {
-                                echo 'Building frontend Docker image...'
-                                bat "docker build -t mern-frontend ${env.FRONTEND_DIR}"
+                                echo '📦 Building frontend Docker image...'
+                                bat "docker build -t mern-frontend ${FRONTEND_DIR}"
                             } catch (Exception e) {
-                                currentBuild.result = 'FAILURE'
-                                error("Frontend build failed: ${e}")
+                                error("❌ Frontend build failed: ${e}")
                             }
                         }
                     }
@@ -48,11 +47,10 @@ pipeline {
                     steps {
                         script {
                             try {
-                                echo 'Building backend Docker image...'
-                                bat "docker build -t mern-backend ${env.BACKEND_DIR}"
+                                echo '📦 Building backend Docker image...'
+                                bat "docker build -t mern-backend ${BACKEND_DIR}"
                             } catch (Exception e) {
-                                currentBuild.result = 'FAILURE'
-                                error("Backend build failed: ${e}")
+                                error("❌ Backend build failed: ${e}")
                             }
                         }
                     }
@@ -64,12 +62,11 @@ pipeline {
             steps {
                 script {
                     try {
-                        echo 'Starting containers with Docker Compose...'
-                        bat 'docker-compose down || exit 0' // Optional: stops old containers
+                        echo '🚀 Running Docker Compose...'
+                        bat 'docker-compose down || exit 0' // stop existing
                         bat 'docker-compose up -d --build'
                     } catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
-                        error("Docker Compose failed: ${e}")
+                        error("❌ Docker Compose failed: ${e}")
                     }
                 }
             }
@@ -78,7 +75,7 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up Docker resources...'
+            echo '🧹 Cleaning up Docker resources...'
             bat 'docker system prune -f -a --volumes || exit 0'
         }
 
