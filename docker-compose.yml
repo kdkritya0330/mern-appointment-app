@@ -1,37 +1,18 @@
-version: "3.8"
+version: "3.9"
 
 services:
   frontend:
     build:
       context: ./client
-      dockerfile: Dockerfile
-    container_name: mern-frontend
+      dockerfile: dockerfile
     ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
+      - "3030:3030"
     depends_on:
       - backend
 
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: mern-backend
+      dockerfile: dockerfile
     ports:
       - "8080:8080"
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - mongo
-
-  mongo:
-    image: mongo
-    container_name: mern-mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-volumes:
-  mongo-data:
