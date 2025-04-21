@@ -1,17 +1,13 @@
-# docker-compose.yml
+version: '3'
 services:
+  frontend:
+    build: ./client
+    ports:
+      - "3030:3000"
+    restart: always
+
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: ./server
     ports:
       - "8080:8080"
-    container_name: mern-backend
-
-  frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    container_name: mern-frontend
+    restart: always
