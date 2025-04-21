@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git credentialsId: 'your-credential-id', url: 'https://github.com/riteshusername/your-repo.git'
+                git credentialsId: 'Disseratation', url: 'https://github.com/riteshusername/your-repo.git'
             }
         }
 
