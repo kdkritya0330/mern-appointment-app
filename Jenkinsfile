@@ -2,89 +2,38 @@ pipeline {
     agent any
 
     environment {
-        FRONTEND_DIR = 'client'
-        BACKEND_DIR = '.'
+        BACKEND_IMAGE = "ritesh/backend-app"
+        FRONTEND_IMAGE = "ritesh/frontend-app"
     }
 
     stages {
-
         stage('Clone Repo') {
             steps {
-                git url: 'https://github.com/kdkritya0330/mern-appointment-app.git', branch: 'main'
+                git credentialsId: 'your-credential-id', url: 'https://github.com/riteshusername/your-repo.git'
             }
         }
 
-        stage('Check Commit Author') {
+        stage('Build Backend Docker Image') {
             steps {
-                script {
-                    def author = bat(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
-                    echo "Last Commit Author: ${author}"
-                    if (author.toLowerCase().contains('jenkins')) {
-                        echo 'Build triggered by Jenkins bot, skipping...'
-                        currentBuild.result = 'SUCCESS'
-                        return
-                    }
-                }
+                sh 'docker build -t $BACKEND_IMAGE .'
             }
         }
 
-        stage('Build Docker Images') {
-            parallel {
-                stage('Build Frontend Image') {
-                    steps {
-                        script {
-                            try {
-                                echo '📦 Building frontend Docker image...'
-                                bat "docker build -t mern-frontend ${FRONTEND_DIR}"
-                            } catch (Exception e) {
-                                error("❌ Frontend build failed: ${e}")
-                            }
-                        }
-                    }
-                }
-
-                stage('Build Backend Image') {
-                    steps {
-                        script {
-                            try {
-                                echo '📦 Building backend Docker image...'
-                                bat "docker build -t mern-backend ${BACKEND_DIR}"
-                            } catch (Exception e) {
-                                error("❌ Backend build failed: ${e}")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Run Docker Compose') {
+        stage('Build Frontend Docker Image') {
             steps {
-                script {
-                    try {
-                        echo '🚀 Running Docker Compose...'
-                        bat 'docker-compose down || exit 0' // stop existing
-                        bat 'docker-compose up -d --build'
-                    } catch (Exception e) {
-                        error("❌ Docker Compose failed: ${e}")
-                    }
+                dir('client') {
+                    sh 'docker build -t $FRONTEND_IMAGE .'
                 }
             }
         }
-    }
 
-    post {
-        always {
-            echo '🧹 Cleaning up Docker resources...'
-            bat 'docker system prune -f -a --volumes || exit 0'
-        }
-
-        success {
-            echo '✅ Pipeline ran successfully!'
-        }
-
-        failure {
-            echo '❌ Pipeline failed. Check logs for details.'
+        stage('Run Containers') {
+            steps {
+                sh 'docker rm -f backend || true'
+                sh 'docker rm -f frontend || true'
+                sh 'docker run -d --name backend -p 8080:8080 $BACKEND_IMAGE'
+                sh 'docker run -d --name frontend -p 3030:3000 $FRONTEND_IMAGE'
+            }
         }
     }
 }
