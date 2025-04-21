@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git credentialsId: 'Disseratation', url: 'https://github.com/riteshusername/your-repo.git'
+                git credentialsId: 'Disseratation', url: 'https://github.com/kdkritya0330/mern-appointment-app'
             }
         }
 
