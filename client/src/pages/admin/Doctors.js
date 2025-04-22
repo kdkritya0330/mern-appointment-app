@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout";
-import axios from "../axiosInstance";
+import axios from "../../axiosInstance";
+
 import { message, Table } from "antd";
 import "../admin/Doctor.css";
 
