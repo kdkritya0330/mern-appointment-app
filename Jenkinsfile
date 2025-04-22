@@ -33,14 +33,6 @@ pipeline {
             }
         }
 
-        // Optional: Backend NPM install if you need it (for testing/linting)
-        // stage('Install Backend Dependencies') {
-        //     steps {
-        //         sh 'rm -rf node_modules'
-        //         sh 'npm ci'
-        //     }
-        // }
-
         stage('Build Backend Docker Image') {
             steps {
                 sh 'docker build -t $BACKEND_IMAGE .'
@@ -57,15 +49,12 @@ pipeline {
 
         stage('Run Containers') {
             steps {
-                // Clean old containers if they exist
                 sh 'docker rm -f backend || true'
                 sh 'docker rm -f frontend || true'
 
-                // Run backend container
-                sh 'docker run -d --name backend -p 8081:8080 $BACKEND_IMAGE'
-
-                // Run frontend container
-                sh 'docker run -d --name frontend -p 3030:3000 $FRONTEND_IMAGE'
+                // Changed ports
+                sh 'docker run -d --name backend -p 8082:8080 $BACKEND_IMAGE'
+                sh 'docker run -d --name frontend -p 3031:3000 $FRONTEND_IMAGE'
             }
         }
     }
