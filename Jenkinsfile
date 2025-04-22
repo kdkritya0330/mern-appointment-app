@@ -62,7 +62,7 @@ pipeline {
                 sh 'docker rm -f frontend || true'
 
                 // Run backend container
-                sh 'docker run -d --name backend -p 8080:8080 $BACKEND_IMAGE'
+                sh 'docker run -d --name backend -p 8081:8080 $BACKEND_IMAGE'
 
                 // Run frontend container
                 sh 'docker run -d --name frontend -p 3030:3000 $FRONTEND_IMAGE'
