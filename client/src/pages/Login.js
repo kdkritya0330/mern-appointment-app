@@ -4,7 +4,7 @@ import { Form, Input, message } from "antd";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../axiosInstance";
 
 const Login = () => {
   const navigate = useNavigate();

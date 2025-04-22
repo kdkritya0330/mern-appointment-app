@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosInstance";
 import Layout from "./../components/Layout";
 import { Spinner } from "react-bootstrap";
 import DoctorList from "../components/DoctorList";
