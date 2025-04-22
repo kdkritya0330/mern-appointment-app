@@ -11,6 +11,7 @@ dotenv.config();
 // MongoDB connection
 connectDB();
 
+
 // Express app instance
 const app = express();
 
@@ -20,8 +21,8 @@ app.use(morgan("dev"));
 
 // CORS setup: allow frontend access
 app.use(cors({
-  origin: "http://15.206.122.239:3030", // ✅ React frontend IP and port
-  credentials: true
+  origin: ["http://localhost:3000", "http://15.206.122.239:3030"], // ✅ allow local + deployed frontend
+  credentials: true,
 }));
 
 // Debug test route
@@ -38,6 +39,8 @@ app.use("/api/v1/doctor", require("./routes/doctorRoutes"));
 const port = process.env.PORT || 8082;
 
 // Start server
+
+
 app.listen(port, () => {
   console.log(
     `🚀 Server Running in ${process.env.NODE_ENV || "development"} mode on port ${port}`
