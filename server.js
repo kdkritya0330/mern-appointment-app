@@ -1,33 +1,46 @@
 const express = require("express");
 const colors = require("colors");
-const moragan = require("morgan");
+const morgan = require("morgan");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const connectDB = require("./config/db");
 
-//dotenv conig
+// dotenv config
 dotenv.config();
 
-//mongodb connection
+// MongoDB connection
 connectDB();
 
-//rest obejct
+// Express app instance
 const app = express();
 
-//middlewares
+// Middleware
 app.use(express.json());
-app.use(moragan("dev"));
+app.use(morgan("dev"));
 
-//routes
+// CORS setup: allow frontend access
+app.use(cors({
+  origin: "http://15.206.122.239:3030", // ✅ React frontend IP and port
+  credentials: true
+}));
+
+// Debug test route
+app.get("/", (req, res) => {
+  res.send("✅ Backend is running");
+});
+
+// Routes
 app.use("/api/v1/user", require("./routes/userRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 app.use("/api/v1/doctor", require("./routes/doctorRoutes"));
 
-//port
+// Port
 const port = process.env.PORT || 8082;
-//listen port
+
+// Start server
 app.listen(port, () => {
   console.log(
-    `Server Running in ${process.env.NODE_MODE} Mode on port ${process.env.PORT}`
+    `🚀 Server Running in ${process.env.NODE_ENV || "development"} mode on port ${port}`
       .bgCyan.white
   );
 });

@@ -1,46 +1,53 @@
-const express = require("express");
-const colors = require("colors");
-const morgan = require("morgan");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const connectDB = require("./config/db");
+import React from "react";
+import "../styles/RegisterStyles.css";
+import { Form, Input, message } from "antd";
+import axios from "../axiosInstance";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "../redux/features/alertSlice";
 
-// dotenv config
-dotenv.config();
+const Register = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-// MongoDB connection
-connectDB();
+  const onfinishHandler = async (values) => {
+    try {
+      dispatch(showLoading());
+      const res = await axios.post("/api/v1/user/register", values);
+      dispatch(hideLoading());
+      if (res.data.success) {
+        message.success("Registered Successfully!");
+        navigate("/login");
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (error) {
+      dispatch(hideLoading());
+      console.log(error);
+      message.error("Something Went Wrong");
+    }
+  };
 
-// Express app instance
-const app = express();
-
-// Middleware
-app.use(express.json());
-app.use(morgan("dev"));
-
-// CORS setup: allow frontend access
-app.use(cors({
-  origin: "http://15.206.122.239:3030", // ✅ React frontend IP and port
-  credentials: true
-}));
-
-// Debug test route
-app.get("/", (req, res) => {
-  res.send("✅ Backend is running");
-});
-
-// Routes
-app.use("/api/v1/user", require("./routes/userRoutes"));
-app.use("/api/v1/admin", require("./routes/adminRoutes"));
-app.use("/api/v1/doctor", require("./routes/doctorRoutes"));
-
-// Port
-const port = process.env.PORT || 8082;
-
-// Start server
-app.listen(port, () => {
-  console.log(
-    `🚀 Server Running in ${process.env.NODE_ENV || "development"} mode on port ${port}`
-      .bgCyan.white
+  return (
+    <div className="form-container">
+      <Form layout="vertical" onFinish={onfinishHandler} className="register-form">
+        <h3>Register Form</h3>
+        <Form.Item label="Name" name="name">
+          <Input type="text" required />
+        </Form.Item>
+        <Form.Item label="Email" name="email">
+          <Input type="email" required />
+        </Form.Item>
+        <Form.Item label="Password" name="password">
+          <Input type="password" required />
+        </Form.Item>
+        <Link to="/login">Already a user? Login here</Link>
+        <button className="btn btn-primary" type="submit">
+          Register
+        </button>
+      </Form>
+    </div>
   );
-});
+};
+
+export default Register;
