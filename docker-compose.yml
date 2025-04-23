@@ -9,5 +9,17 @@ services:
   backend:
     build: ./server
     ports:
-      - "8080:8080"
+      - "8082:8082"  # Backend runs on port 8082
+    restart: always
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx  # Assuming you have a custom Nginx Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"  # Expose Nginx on port 80
+    depends_on:
+      - frontend
+      - backend
     restart: always

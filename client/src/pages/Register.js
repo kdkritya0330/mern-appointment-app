@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/RegisterStyles.css";
 import { Form, Input, message } from "antd";
-import axios from "../axiosInstance";
+import axios from "../axiosInstance"; // using custom Axios with baseURL: '/api'
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
@@ -13,7 +13,10 @@ const Register = () => {
   const onfinishHandler = async (values) => {
     try {
       dispatch(showLoading());
-      const res = await axios.post("/api/v1/user/register", values);
+
+      // 💥 Axios will call /api/v1/user/register, routed by Nginx
+      const res = await axios.post("/v1/user/register", values);
+
       dispatch(hideLoading());
       if (res.data.success) {
         message.success("Registered Successfully!");

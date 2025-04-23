@@ -20,7 +20,7 @@ const Profile = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/doctor/updateProfile",
+        "/v1/doctor/updateProfile",
         {
           ...values,
           userId: user._id,
