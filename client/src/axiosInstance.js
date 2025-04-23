@@ -1,8 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 const instance = axios.create({
-  baseURL: '/api', // <--- Nginx will forward this
-  withCredentials: true, // only if using cookies/session auth
+  baseURL: "http://13.127.137.215:8082", // 'backend' is the Docker service name
 });
 
 export default instance;
