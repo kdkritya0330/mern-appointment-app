@@ -1,25 +1,26 @@
-version: '3'
 services:
-  frontend:
-    build: ./client
-    ports:
-      - "3030:3000"
-    restart: always
-
   backend:
-    build: ./server
-    ports:
-      - "8082:8082"  # Backend runs on port 8082
-    restart: always
-
-  nginx:
     build:
-      context: .
-      dockerfile: Dockerfile.nginx  # Assuming you have a custom Nginx Dockerfile
-    container_name: nginx
+      context: ./backend
+    container_name: backend
     ports:
-      - "80:80"  # Expose Nginx on port 80
+      - "8082:8082"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
     depends_on:
-      - frontend
       - backend
-    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

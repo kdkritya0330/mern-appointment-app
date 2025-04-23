@@ -1,7 +1,6 @@
 {
   "name": "client",
-  "proxy": "http://backend:8082"
-
+  "proxy": "http://backend:8082",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
