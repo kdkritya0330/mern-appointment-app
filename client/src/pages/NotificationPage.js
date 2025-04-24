@@ -17,7 +17,7 @@ const NotificationPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/v1/user/get-all-notification",
+        "api/v1/user/get-all-notification",
         { userId: user._id },
         {
           headers: {

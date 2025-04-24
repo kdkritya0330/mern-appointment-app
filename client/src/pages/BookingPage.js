@@ -21,7 +21,7 @@ const BookingPage = () => {
   // Fetching all doctors
   const getDoctors = async () => {
     try {
-      const res = await axios.get("/v1/doctor/getAllDoctors", {
+      const res = await axios.get("api/v1/doctor/getAllDoctors", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },

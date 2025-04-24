@@ -11,7 +11,7 @@ const Doctors = () => {
   // Get all doctors
   const getDoctors = async () => {
     try {
-      const res = await axios.get("/v1/admin/getAllDoctors", {
+      const res = await axios.get("api/v1/admin/getAllDoctors", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
