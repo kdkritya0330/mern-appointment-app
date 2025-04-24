@@ -15,7 +15,7 @@ const Register = () => {
       dispatch(showLoading());
 
       // 💥 Axios will call /api/v1/user/register, routed by Nginx
-      const res = await axios.post("/v1/user/register", values);
+      const res = await axios.post("api/v1/user/register", values);
 
       dispatch(hideLoading());
       if (res.data.success) {
