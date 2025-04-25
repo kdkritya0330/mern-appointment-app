@@ -38,7 +38,7 @@ const BookingPage = () => {
   const getDoctorById = async () => {
     try {
       const res = await axios.post(
-        "//v1/doctor/getDoctorById",
+        "/v1/doctor/getDoctorById",
         { doctorId: params.doctorId },
         {
           headers: {
