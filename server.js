@@ -20,10 +20,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // CORS setup: allow frontend access
-app.use(cors({
-  origin: ["http://localhost:3000", "http://15.206.122.239:3000"], // ✅ allow local + deployed frontend
-  credentials: true,
-}));
+app.use(cors());
 
 // Debug test route
 app.get("/", (req, res) => {
