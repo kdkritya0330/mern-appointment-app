@@ -25,7 +25,7 @@ router.get(
   authMiddleware,
   doctorAppointmentsController
 );
-router.get('/getAllDoctors', getDoctorsController);
+router.post('/getAllDoctors', getDoctorsController);
 
 //POST Update Status
 router.post("/update-status", authMiddleware, updateStatusController);
