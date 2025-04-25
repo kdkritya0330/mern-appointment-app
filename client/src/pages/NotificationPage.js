@@ -17,7 +17,7 @@ const NotificationPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "api/v1/user/get-all-notification",
+        "/v1/user/get-all-notification",
         { userId: user._id },
         {
           headers: {
@@ -41,7 +41,7 @@ const NotificationPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/delete-all-notification",
+        "//v1/user/delete-all-notification",
         { userId: user._id },
         {
           headers: {

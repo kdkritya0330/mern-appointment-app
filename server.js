@@ -31,9 +31,9 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/api/v1/user", require("./routes/userRoutes"));
-app.use("/api/v1/admin", require("./routes/adminRoutes"));
-app.use("/api/v1/doctor", require("./routes/doctorRoutes"));
+app.use("//v1/user", require("./routes/userRoutes"));
+app.use("//v1/admin", require("./routes/adminRoutes"));
+app.use("//v1/doctor", require("./routes/doctorRoutes"));
 
 // Port
 const port = process.env.PORT || 8082;

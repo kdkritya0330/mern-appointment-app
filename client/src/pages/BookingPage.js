@@ -21,7 +21,7 @@ const BookingPage = () => {
   // Fetching all doctors
   const getDoctors = async () => {
     try {
-      const res = await axios.get("api/v1/doctor/getAllDoctors", {
+      const res = await axios.get("/v1/doctor/getAllDoctors", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -38,7 +38,7 @@ const BookingPage = () => {
   const getDoctorById = async () => {
     try {
       const res = await axios.post(
-        "/api/v1/doctor/getDoctorById",
+        "//v1/doctor/getDoctorById",
         { doctorId: params.doctorId },
         {
           headers: {
@@ -59,7 +59,7 @@ const BookingPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/booking-availbility",
+        "//v1/user/booking-availbility",
         { doctorId: params.doctorId, date, time },
         {
           headers: {
@@ -88,7 +88,7 @@ const BookingPage = () => {
       }
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/book-appointment",
+        "//v1/user/book-appointment",
         {
           doctorId: params.doctorId,
           userId: user._id,
