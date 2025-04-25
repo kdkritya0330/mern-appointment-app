@@ -47,7 +47,7 @@ const HomePage = () => {
 
   const getUserData = async () => {
     try {
-      const res = await axios.get("//v1/user/getAllDoctors", {
+      const res = await axios.get("/v1/user/getAllDoctors", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
