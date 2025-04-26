@@ -28,7 +28,7 @@ const Doctors = () => {
   const handleAccountStatus = async (record, status) => {
     try {
       const res = await axios.post(
-        "//v1/admin/changeAccountStatus",
+        "/v1/admin/changeAccountStatus",
         { doctorId: record._id, userId: record.userId, status: status },
         {
           headers: {
@@ -49,7 +49,7 @@ const Doctors = () => {
   const handleRejectDoctor = async (record) => {
     try {
       const res = await axios.post(
-        "//v1/admin/rejectDoctor",
+        "/v1/admin/rejectDoctor",
         { doctorId: record._id, userId: record.userId },
         {
           headers: {
