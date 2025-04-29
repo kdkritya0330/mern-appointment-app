@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="row text-center text-md-start">
           {/* Section 1: Hospital Info */}
           <div className="col-md-4 mb-4">
-            <h5 className="fw-bold">ApolloCare Hospital</h5>
+            <h5 className="fw-bold">Ritesh Hospital</h5>
             <p>
               Dedicated to compassionate and cutting-edge healthcare.
               <br />
@@ -32,13 +32,13 @@ const Footer = () => {
             <h5 className="fw-bold">Contact</h5>
             <p><i className="bi bi-geo-alt-fill me-2"></i>Pune, Maharashtra, India</p>
             <p><i className="bi bi-telephone-fill me-2"></i>+91 9876543210</p>
-            <p><i className="bi bi-envelope-fill me-2"></i>support@apollocare.com</p>
+            <p><i className="bi bi-envelope-fill me-2"></i>support@riteshcare.com</p>
           </div>
         </div>
 
         {/* Bottom line */}
         <div className="text-center mt-3 border-top pt-3">
-          <small>&copy; {new Date().getFullYear()} ApolloCare Hospital. All rights reserved.</small>
+          <small>&copy; {new Date().getFullYear()} Ritesh Hospital. All rights reserved.</small>
         </div>
       </div>
     </footer>
