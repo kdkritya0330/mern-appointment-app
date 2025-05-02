@@ -59,7 +59,7 @@ const BookingPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "//v1/user/booking-availbility",
+        "/v1/user/booking-availbility",
         { doctorId: params.doctorId, date, time },
         {
           headers: {

@@ -52,7 +52,7 @@ const Profile = () => {
   const getDoctorInfo = async () => {
     try {
       const res = await axios.post(
-        "//v1/doctor/getDoctorInfo",
+        "/v1/doctor/getDoctorInfo",
         { userId: params.id },
         {
           headers: {
