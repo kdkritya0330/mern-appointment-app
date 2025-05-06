@@ -6,14 +6,14 @@ const getAllUsersController = async (req, res) => {
     const users = await userModel.find({});
     res.status(200).send({
       success: true,
-      message: "users data list",
+      message: "Users data list",
       data: users,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "erorr while fetching users",
+      message: "Error while fetching users",
       error,
     });
   }
@@ -24,29 +24,28 @@ const getAllDoctorsController = async (req, res) => {
     const doctors = await doctorModel.find({});
     res.status(200).send({
       success: true,
-      message: "Doctors Data list",
+      message: "Doctors data list",
       data: doctors,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "error while getting doctors data",
+      message: "Error while getting doctors data",
       error,
     });
   }
 };
 
-// doctor account status
+// Approve/Reject doctor status
 const changeAccountStatusController = async (req, res) => {
   try {
     const { doctorId, status } = req.body;
     const doctor = await doctorModel.findByIdAndUpdate(doctorId, { status });
     const user = await userModel.findOne({ _id: doctor.userId });
-    const notifcation = user.notifcation;
-    notifcation.push({
+    user.notifcation.push({
       type: "doctor-account-request-updated",
-      message: `Your Doctor Account Request Has ${status} `,
+      message: `Your Doctor Account Request Has ${status}`,
       onClickPath: "/notification",
     });
     user.isDoctor = status === "approved" ? true : false;
@@ -60,7 +59,29 @@ const changeAccountStatusController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Eror in Account Status",
+      message: "Error in Account Status",
+      error,
+    });
+  }
+};
+
+// ✅ Reject doctor and delete doctor + user
+const rejectDoctorController = async (req, res) => {
+  try {
+    const { doctorId, userId } = req.body;
+
+    await doctorModel.findByIdAndDelete(doctorId);
+    await userModel.findByIdAndDelete(userId);
+
+    res.status(200).send({
+      success: true,
+      message: "Doctor rejected and removed successfully",
+    });
+  } catch (error) {
+    console.log("Reject Doctor Error:", error);
+    res.status(500).send({
+      success: false,
+      message: "Error while rejecting doctor",
       error,
     });
   }
@@ -70,4 +91,5 @@ module.exports = {
   getAllDoctorsController,
   getAllUsersController,
   changeAccountStatusController,
+  rejectDoctorController, // <-- Add this to your exports
 };

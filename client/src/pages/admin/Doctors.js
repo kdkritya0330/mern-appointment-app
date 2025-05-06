@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Layout from "./../../components/Layout";
+import Layout from "../../components/Layout";
 import axios from "../../axiosInstance";
-
-import { message, Table } from "antd";
+import { message, Table, Popconfirm } from "antd";
 import "../admin/Doctor.css";
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);
 
-  // Get all doctors
+  // Fetch all doctors
   const getDoctors = async () => {
     try {
       const res = await axios.get("/v1/admin/getAllDoctors", {
@@ -20,7 +19,8 @@ const Doctors = () => {
         setDoctors(res.data.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching doctors:", error);
+      message.error("Unable to fetch doctors");
     }
   };
 
@@ -29,7 +29,11 @@ const Doctors = () => {
     try {
       const res = await axios.post(
         "/v1/admin/changeAccountStatus",
-        { doctorId: record._id, userId: record.userId, status: status },
+        {
+          doctorId: record._id,
+          userId: record.userId,
+          status,
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -38,10 +42,11 @@ const Doctors = () => {
       );
       if (res.data.success) {
         message.success(res.data.message);
-        getDoctors(); // Refresh list
+        getDoctors(); // Refresh
       }
     } catch (error) {
-      message.error("Something went wrong.");
+      console.error("Error updating status:", error);
+      message.error("Something went wrong while updating status");
     }
   };
 
@@ -50,7 +55,10 @@ const Doctors = () => {
     try {
       const res = await axios.post(
         "/v1/admin/rejectDoctor",
-        { doctorId: record._id, userId: record.userId },
+        {
+          doctorId: record._id,
+          userId: record.userId,
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,9 +67,10 @@ const Doctors = () => {
       );
       if (res.data.success) {
         message.success("Doctor rejected and removed successfully");
-        getDoctors(); // Refresh list
+        getDoctors();
       }
     } catch (error) {
+      console.error("Reject doctor error:", error);
       message.error("Failed to reject the doctor");
     }
   };
@@ -81,35 +90,42 @@ const Doctors = () => {
       ),
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: "Email",
+      dataIndex: "email",
     },
     {
       title: "Phone",
       dataIndex: "phone",
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      render: (status) => (
+        <span className={`status-${status}`}>{status.toUpperCase()}</span>
+      ),
+    },
+    {
       title: "Actions",
       dataIndex: "actions",
       render: (text, record) => (
-        <div className="d-flex gap-2">
-          {record.status === "pending" && (
-            <>
-              <button
-                className="btn btn-success"
-                onClick={() => handleAccountStatus(record, "approved")}
-              >
-                Approve
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => handleRejectDoctor(record)}
-              >
-                Reject
-              </button>
-            </>
-          )}
-        </div>
+        record.status === "pending" && (
+          <div className="d-flex gap-2">
+            <button
+              className="btn btn-success"
+              onClick={() => handleAccountStatus(record, "approved")}
+            >
+              Approve
+            </button>
+            <Popconfirm
+              title="Reject and delete this doctor?"
+              onConfirm={() => handleRejectDoctor(record)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <button className="btn btn-danger">Reject</button>
+            </Popconfirm>
+          </div>
+        )
       ),
     },
   ];
@@ -120,8 +136,9 @@ const Doctors = () => {
       <Table
         columns={columns}
         dataSource={doctors}
-        rowClassName="table-row"
+        rowKey="_id"
         className="animated-table"
+        pagination={{ pageSize: 5 }}
       />
     </Layout>
   );
